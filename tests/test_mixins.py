@@ -8,7 +8,7 @@ def test_invalid_attributes():
     """
     Tests how set/delattr handle invalid attributes.
     """
-    from dotdict.mapping import AttrMap
+    from attrdictionary.mapping import AttrMap
 
     mapping = AttrMap()
 
@@ -65,7 +65,7 @@ def test_constructor():
     """
     _constructor MUST be implemented.
     """
-    from dotdict.mixins import Attr
+    from attrdictionary.mixins import Attr
 
     class AttrImpl(Attr):
         """

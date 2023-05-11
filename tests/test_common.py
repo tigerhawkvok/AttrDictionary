@@ -11,7 +11,7 @@ from sys import version_info
 
 import pytest
 
-from dotdict.mixins import Attr
+from attrdictionary.mixins import Attr
 
 
 Options = namedtuple(
@@ -92,7 +92,7 @@ def test_attrmap():
     """
     Run AttrMap against the common tests.
     """
-    from dotdict.mapping import AttrMap
+    from attrdictionary.mapping import AttrMap
 
     for test, options in common(AttrMap, mutable=True):
         test(options)
@@ -102,7 +102,7 @@ def test_attrdict():
     """
     Run AttrDict against the common tests.
     """
-    from dotdict.dictionary import AttrDict
+    from attrdictionary.dictionary import AttrDict
 
     view_methods = (2, 7) <= version_info < (3,)
 
@@ -125,7 +125,7 @@ def test_attrdefault():
     """
     Run AttrDefault against the common tests.
     """
-    from dotdict.default import AttrDefault
+    from attrdictionary.default import AttrDefault
 
     def constructor(items=None, sequence_type=tuple):
         """

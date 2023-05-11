@@ -2,7 +2,7 @@
 Tests for the AttrDict class.
 """
 import pytest
-from dotdict.dictionary import AttrDict
+from attrdictionary.dictionary import AttrDict
 
 
 def test_init():

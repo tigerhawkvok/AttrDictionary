@@ -2,7 +2,7 @@
 Tests for the AttrDefault class.
 """
 import pytest
-from dotdict.default import AttrDefault
+from attrdictionary.default import AttrDefault
 
 
 def test_method_missing():

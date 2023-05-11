@@ -1,3 +1,3 @@
 """
-Tests for the dotdict module
+Tests for the attrdictionary module
 """

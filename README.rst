@@ -1,13 +1,13 @@
 ========
-DotDict
+AttrDictionary
 ========
 
-DotDict is an MIT-licensed library that provides mapping objects that allow
+AttrDictionary is an MIT-licensed library that provides mapping objects that allow
 their elements to be accessed both as keys and as attributes. It originates from a
-fork of AttrDict which is sadly no longer maintained. DotDict fully compatible with
+fork of AttrDict which is sadly no longer maintained. AttrDictionary fully compatible with
 AttrDict except support for Python 2 versions. This version was tested on Python 3.11::
 
-    > from dotdict import AttrDict
+    > from attrdictionary import AttrDict
     > a = AttrDict({'foo': 'bar'})
     > a.foo
     'bar'
@@ -28,17 +28,17 @@ Installation
 ============
 AttrDict is in PyPI, so it can be installed directly using::
 
-    $ pip install dotdict
+    $ pip install attrdictionary
 
 Or from Github::
 
-    $ git clone https://github.com/kiselas/DotDict
-    $ cd DotDict
+    $ git clone https://github.com/kiselas/AttrDictionary
+    $ cd AttrDictionary
     $ python setup.py install
 
 Basic Usage
 ===========
-DotDict comes with three different classes, `AttrMap`, `AttrDict`, and
+AttrDictionary comes with three different classes, `AttrMap`, `AttrDict`, and
 `AttrDefault`. They are all fairly similar, as they all are MutableMappings (
 read: dictionaries) that allow creating, accessing, and deleting key-value
 pairs as attributes.
@@ -190,4 +190,4 @@ to ``False``.
 
 License
 =======
-DotDict is released under a MIT license.
+AttrDictionary is released under a MIT license.

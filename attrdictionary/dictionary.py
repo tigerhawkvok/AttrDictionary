@@ -1,7 +1,7 @@
 """
 A dict that implements MutableAttr.
 """
-from dotdict.mixins import MutableAttr
+from attrdictionary.mixins import MutableAttr
 
 __all__ = ["AttrDict"]
 

@@ -3,7 +3,7 @@ A subclass of MutableAttr that has defaultdict support.
 """
 from collections.abc import Mapping
 
-from dotdict.mixins import MutableAttr
+from attrdictionary.mixins import MutableAttr
 
 __all__ = ["AttrDefault"]
 
