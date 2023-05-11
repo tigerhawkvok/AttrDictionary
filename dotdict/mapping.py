@@ -1,14 +1,11 @@
 """
 An implementation of MutableAttr.
 """
-from collections import Mapping
+from collections.abc import Mapping
 
-import six
+from dotdict.mixins import MutableAttr
 
-from attrdict.mixins import MutableAttr
-
-
-__all__ = ['AttrMap']
+__all__ = ["AttrMap"]
 
 
 class AttrMap(MutableAttr):
@@ -21,9 +18,9 @@ class AttrMap(MutableAttr):
         elif not isinstance(items, Mapping):
             items = dict(items)
 
-        self._setattr('_sequence_type', sequence_type)
-        self._setattr('_mapping', items)
-        self._setattr('_allow_invalid_attributes', False)
+        self._setattr("_sequence_type", sequence_type)
+        self._setattr("_mapping", items)
+        self._setattr("_allow_invalid_attributes", False)
 
     def _configuration(self):
         """
@@ -68,7 +65,7 @@ class AttrMap(MutableAttr):
         # sequence type seems like more trouble than it is worth.
         # If people want full serialization, they can pickle, and in
         # 99% of cases, sequence_type won't change anyway
-        return six.u("AttrMap({mapping})").format(mapping=repr(self._mapping))
+        return f"AttrMap({repr(self._mapping)})"
 
     def __getstate__(self):
         """
@@ -77,7 +74,7 @@ class AttrMap(MutableAttr):
         return (
             self._mapping,
             self._sequence_type,
-            self._allow_invalid_attributes
+            self._allow_invalid_attributes,
         )
 
     def __setstate__(self, state):
@@ -85,9 +82,9 @@ class AttrMap(MutableAttr):
         Deserialize the object.
         """
         mapping, sequence_type, allow_invalid_attributes = state
-        self._setattr('_mapping', mapping)
-        self._setattr('_sequence_type', sequence_type)
-        self._setattr('_allow_invalid_attributes', allow_invalid_attributes)
+        self._setattr("_mapping", mapping)
+        self._setattr("_sequence_type", sequence_type)
+        self._setattr("_allow_invalid_attributes", allow_invalid_attributes)
 
     @classmethod
     def _constructor(cls, mapping, configuration):

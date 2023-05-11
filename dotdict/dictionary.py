@@ -1,12 +1,9 @@
 """
 A dict that implements MutableAttr.
 """
-from attrdict.mixins import MutableAttr
+from dotdict.mixins import MutableAttr
 
-import six
-
-
-__all__ = ['AttrDict']
+__all__ = ["AttrDict"]
 
 
 class AttrDict(dict, MutableAttr):
@@ -14,10 +11,10 @@ class AttrDict(dict, MutableAttr):
     A dict that implements MutableAttr.
     """
     def __init__(self, *args, **kwargs):
-        super(AttrDict, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
-        self._setattr('_sequence_type', tuple)
-        self._setattr('_allow_invalid_attributes', False)
+        self._setattr("_sequence_type", tuple)
+        self._setattr("_allow_invalid_attributes", False)
 
     def _configuration(self):
         """
@@ -32,7 +29,7 @@ class AttrDict(dict, MutableAttr):
         return (
             self.copy(),
             self._sequence_type,
-            self._allow_invalid_attributes
+            self._allow_invalid_attributes,
         )
 
     def __setstate__(self, state):
@@ -41,12 +38,12 @@ class AttrDict(dict, MutableAttr):
         """
         mapping, sequence_type, allow_invalid_attributes = state
         self.update(mapping)
-        self._setattr('_sequence_type', sequence_type)
-        self._setattr('_allow_invalid_attributes', allow_invalid_attributes)
+        self._setattr("_sequence_type", sequence_type)
+        self._setattr("_allow_invalid_attributes", allow_invalid_attributes)
 
     def __repr__(self):
-        return six.u('AttrDict({contents})').format(
-            contents=super(AttrDict, self).__repr__()
+        return "AttrDict({contents})".format(
+            contents=super().__repr__(),
         )
 
     @classmethod
@@ -55,6 +52,6 @@ class AttrDict(dict, MutableAttr):
         A standardized constructor.
         """
         attr = cls(mapping)
-        attr._setattr('_sequence_type', configuration)
+        attr._setattr("_sequence_type", configuration)
 
         return attr

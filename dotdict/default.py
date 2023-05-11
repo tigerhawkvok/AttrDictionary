@@ -1,14 +1,11 @@
 """
 A subclass of MutableAttr that has defaultdict support.
 """
-from collections import Mapping
+from collections.abc import Mapping
 
-import six
+from dotdict.mixins import MutableAttr
 
-from attrdict.mixins import MutableAttr
-
-
-__all__ = ['AttrDefault']
+__all__ = ["AttrDefault"]
 
 
 class AttrDefault(MutableAttr):
@@ -22,11 +19,11 @@ class AttrDefault(MutableAttr):
         elif not isinstance(items, Mapping):
             items = dict(items)
 
-        self._setattr('_default_factory', default_factory)
-        self._setattr('_mapping', items)
-        self._setattr('_sequence_type', sequence_type)
-        self._setattr('_pass_key', pass_key)
-        self._setattr('_allow_invalid_attributes', False)
+        self._setattr("_default_factory", default_factory)
+        self._setattr("_mapping", items)
+        self._setattr("_sequence_type", sequence_type)
+        self._setattr("_pass_key", pass_key)
+        self._setattr("_allow_invalid_attributes", False)
 
     def _configuration(self):
         """
@@ -87,9 +84,7 @@ class AttrDefault(MutableAttr):
         """
         Return a string representation of the object.
         """
-        return six.u(
-            "AttrDefault({default_factory}, {pass_key}, {mapping})"
-        ).format(
+        return "AttrDefault({default_factory}, {pass_key}, {mapping})".format(
             default_factory=repr(self._default_factory),
             pass_key=repr(self._pass_key),
             mapping=repr(self._mapping),
@@ -114,11 +109,11 @@ class AttrDefault(MutableAttr):
         (default_factory, mapping, sequence_type, pass_key,
          allow_invalid_attributes) = state
 
-        self._setattr('_default_factory', default_factory)
-        self._setattr('_mapping', mapping)
-        self._setattr('_sequence_type', sequence_type)
-        self._setattr('_pass_key', pass_key)
-        self._setattr('_allow_invalid_attributes', allow_invalid_attributes)
+        self._setattr("_default_factory", default_factory)
+        self._setattr("_mapping", mapping)
+        self._setattr("_sequence_type", sequence_type)
+        self._setattr("_pass_key", pass_key)
+        self._setattr("_allow_invalid_attributes", allow_invalid_attributes)
 
     @classmethod
     def _constructor(cls, mapping, configuration):
