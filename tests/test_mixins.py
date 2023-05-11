@@ -1,14 +1,14 @@
 """
 Tests for the AttrDefault class.
 """
-from nose.tools import assert_equals, assert_raises
+import pytest
 
 
 def test_invalid_attributes():
     """
     Tests how set/delattr handle invalid attributes.
     """
-    from attrdict.mapping import AttrMap
+    from dotdict.mapping import AttrMap
 
     mapping = AttrMap()
 
@@ -19,15 +19,19 @@ def test_invalid_attributes():
         """
         mapping._key = 'value'
 
-    assert_raises(TypeError, assign)
-    assert_raises(AttributeError, lambda: mapping._key)
-    assert_equals(mapping, {})
+    with pytest.raises(TypeError):
+        assign()
+
+    with pytest.raises(AttributeError):
+        mapping._key
+
+    assert mapping == {}
 
     mapping._setattr('_allow_invalid_attributes', True)
 
     assign()
-    assert_equals(mapping._key, 'value')
-    assert_equals(mapping, {})
+    assert mapping._key == 'value'
+    assert mapping == {}
 
     # delete the attribute
     def delete():
@@ -37,28 +41,31 @@ def test_invalid_attributes():
         del mapping._key
 
     delete()
-    assert_raises(AttributeError, lambda: mapping._key)
-    assert_equals(mapping, {})
+    with pytest.raises(AttributeError):
+        mapping._key
+    assert mapping == {}
 
     # now with disallowing invalid
     assign()
     mapping._setattr('_allow_invalid_attributes', False)
 
-    assert_raises(TypeError, delete)
-    assert_equals(mapping._key, 'value')
-    assert_equals(mapping, {})
+    with pytest.raises(TypeError):
+        delete()
+    assert mapping._key == 'value'
+    assert mapping == {}
 
     # force delete
     mapping._delattr('_key')
-    assert_raises(AttributeError, lambda: mapping._key)
-    assert_equals(mapping, {})
+    with pytest.raises(AttributeError):
+        mapping._key
+    assert mapping == {}
 
 
 def test_constructor():
     """
     _constructor MUST be implemented.
     """
-    from attrdict.mixins import Attr
+    from dotdict.mixins import Attr
 
     class AttrImpl(Attr):
         """
@@ -66,4 +73,5 @@ def test_constructor():
         """
         pass
 
-    assert_raises(NotImplementedError, lambda: AttrImpl._constructor({}, ()))
+    with pytest.raises(NotImplementedError):
+        AttrImpl._constructor({}, ())

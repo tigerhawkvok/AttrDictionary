@@ -1,19 +1,15 @@
 """
 Mixin Classes for Attr-support.
 """
-from abc import ABCMeta, abstractmethod
-from collections import Mapping, MutableMapping, Sequence
 import re
+from abc import abstractmethod
+from collections.abc import Mapping, MutableMapping, Sequence
 
-import six
+from dotdict.merge import merge
 
-from attrdict.merge import merge
-
-
-__all__ = ['Attr', 'MutableAttr']
+__all__ = ["Attr", "MutableAttr"]
 
 
-@six.add_metaclass(ABCMeta)
 class Attr(Mapping):
     """
     A mixin class for a mapping that allows for attribute-style access
@@ -66,8 +62,8 @@ class Attr(Mapping):
         if key not in self:
             raise AttributeError(
                 "'{cls} instance has no attribute '{name}'".format(
-                    cls=self.__class__.__name__, name=key
-                )
+                    cls=self.__class__.__name__, name=key,
+                ),
             )
 
         return self._build(self[key])
@@ -79,8 +75,8 @@ class Attr(Mapping):
         if key not in self or not self._valid_name(key):
             raise AttributeError(
                 "'{cls}' instance has no attribute '{name}'".format(
-                    cls=self.__class__.__name__, name=key
-                )
+                    cls=self.__class__.__name__, name=key,
+                ),
             )
 
         return self._build(self[key])
@@ -125,9 +121,8 @@ class Attr(Mapping):
         """
         if isinstance(obj, Mapping):
             obj = self._constructor(obj, self._configuration())
-        elif (isinstance(obj, Sequence) and
-              not isinstance(obj, (six.string_types, six.binary_type))):
-            sequence_type = getattr(self, '_sequence_type', None)
+        elif isinstance(obj, Sequence) and not isinstance(obj, str | bytes):
+            sequence_type = getattr(self, "_sequence_type", None)
 
             if sequence_type:
                 obj = sequence_type(self._build(element) for element in obj)
@@ -147,13 +142,12 @@ class Attr(Mapping):
             'register').
         """
         return (
-            isinstance(key, six.string_types) and
-            re.match('^[A-Za-z][A-Za-z0-9_]*$', key) and
-            not hasattr(cls, key)
+                isinstance(key, str)  and
+                re.match("^[A-Za-z][A-Za-z0-9_]*$", key) and
+                not hasattr(cls, key)
         )
 
 
-@six.add_metaclass(ABCMeta)
 class MutableAttr(Attr, MutableMapping):
     """
     A mixin class for a mapping that allows for attribute-style access
@@ -164,7 +158,7 @@ class MutableAttr(Attr, MutableMapping):
         Add an attribute to the object, without attempting to add it as
         a key to the mapping.
         """
-        super(MutableAttr, self).__setattr__(key, value)
+        super().__setattr__(key, value)
 
     def __setattr__(self, key, value):
         """
@@ -175,13 +169,11 @@ class MutableAttr(Attr, MutableMapping):
         """
         if self._valid_name(key):
             self[key] = value
-        elif getattr(self, '_allow_invalid_attributes', True):
-            super(MutableAttr, self).__setattr__(key, value)
+        elif getattr(self, "_allow_invalid_attributes", True):
+            super().__setattr__(key, value)
         else:
             raise TypeError(
-                "'{cls}' does not allow attribute creation.".format(
-                    cls=self.__class__.__name__
-                )
+                f"'{self.__class__.__name__}' does not allow attribute creation.",
             )
 
     def _delattr(self, key):
@@ -189,9 +181,9 @@ class MutableAttr(Attr, MutableMapping):
         Delete an attribute from the object, without attempting to
         remove it from the mapping.
         """
-        super(MutableAttr, self).__delattr__(key)
+        super().__delattr__(key)
 
-    def __delattr__(self, key, force=False):
+    def __delattr__(self, key):
         """
         Delete an attribute.
 
@@ -199,11 +191,9 @@ class MutableAttr(Attr, MutableMapping):
         """
         if self._valid_name(key):
             del self[key]
-        elif getattr(self, '_allow_invalid_attributes', True):
-            super(MutableAttr, self).__delattr__(key)
+        elif getattr(self, "_allow_invalid_attributes", True):
+            super().__delattr__(key)
         else:
             raise TypeError(
-                "'{cls}' does not allow attribute deletion.".format(
-                    cls=self.__class__.__name__
-                )
+                f"'{self.__class__.__name__}' does not allow attribute deletion.",
             )

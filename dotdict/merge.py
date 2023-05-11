@@ -1,10 +1,9 @@
 """
 A right-favoring Mapping merge.
 """
-from collections import Mapping
+from collections.abc import Mapping
 
-
-__all__ = ['merge']
+__all__ = ["merge"]
 
 
 def merge(left, right):
