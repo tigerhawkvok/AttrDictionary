@@ -6,11 +6,10 @@ To install AttrDict:
 from setuptools import setup
 
 DESCRIPTION = "A dict with attribute-style access"
-
-try:
-    LONG_DESCRIPTION = open("README.rst").read()
-except:
-    LONG_DESCRIPTION = DESCRIPTION
+LONG_DESCRIPTION = "AttrDictionary is an MIT-licensed library that provides mapping objects that allow their elements to be " \
+              "accessed both as keys and as attributes. It originates from a fork of AttrDict which is sadly no longer " \
+              "maintained. AttrDictionary fully compatible with AttrDict except support for Python 2 versions. " \
+              "This version was tested on Python 3.11:"
 
 
 setup(
