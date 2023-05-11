@@ -2,7 +2,7 @@
 Tests for the AttrMap class.
 """
 import pytest
-from dotdict.mapping import AttrMap
+from attrdictionary.mapping import AttrMap
 
 
 def test_repr():

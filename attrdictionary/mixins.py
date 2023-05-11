@@ -5,7 +5,7 @@ import re
 from abc import abstractmethod
 from collections.abc import Mapping, MutableMapping, Sequence
 
-from dotdict.merge import merge
+from attrdictionary.merge import merge
 
 __all__ = ["Attr", "MutableAttr"]
 

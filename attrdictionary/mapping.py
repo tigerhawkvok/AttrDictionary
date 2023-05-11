@@ -3,7 +3,7 @@ An implementation of MutableAttr.
 """
 from collections.abc import Mapping
 
-from dotdict.mixins import MutableAttr
+from attrdictionary.mixins import MutableAttr
 
 __all__ = ["AttrMap"]
 

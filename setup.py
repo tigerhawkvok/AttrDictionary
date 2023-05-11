@@ -14,12 +14,12 @@ except:
 
 
 setup(
-    name="dotdict",
+    name="attrdictionary",
     version="1.0.0",
     author="Kiselev Aleksandr",
     author_email="kisel.nf97@gmail.com",
-    packages=("dotdict",),
-    url="https://github.com/kiselas/DotDict",
+    packages=("attrdictionary",),
+    url="https://github.com/kiselas/AttrDictionary",
     license="MIT License",
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,

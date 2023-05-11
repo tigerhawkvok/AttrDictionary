@@ -7,7 +7,7 @@ def test_merge():
     """
     merge function.
     """
-    from dotdict.merge import merge
+    from attrdictionary.merge import merge
 
     left = {
         'baz': 'qux',
