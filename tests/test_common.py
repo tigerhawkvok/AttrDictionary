@@ -156,7 +156,7 @@ def common(cls, constructor=None, mutable=False, iter_methods=False, view_method
     """
     Iterates over tests common to multiple Attr-derived classes
 
-    cls: The class that is being testeitem_accessd.
+    cls: The class that is being tested/item_accessed.
     mutable: (optional, False) Whether the object is supposed to be mutable.
     iter_methods: (optional, False) Whether the class implements iter<keys,values,items> under Python 2.
     view_methods: (optional, False) Whether the class implements view<keys,values,items> under Python 2.
@@ -182,6 +182,7 @@ def common(cls, constructor=None, mutable=False, iter_methods=False, view_method
 
     test_results = []
     for test in tests:
+        assert isinstance(test.__doc__, str)
         test.description = test.__doc__.format(cls=cls.__name__)
         test_results.append((test, options))
 
@@ -214,7 +215,7 @@ def item_access(options):
     # key that cannot be an attribute
     assert mapping[3] == 'three'
     with pytest.raises(TypeError):
-        getattr(mapping, 3)
+        getattr(mapping, 3) # type: ignore
     assert mapping(3) == 'three'
     assert mapping.get(3) == 'three'
 
@@ -465,7 +466,7 @@ def item_creation(options):
 
         # key that cannot be an attribute
         with pytest.raises(TypeError):
-            setattr(mapping, 1, 'one')
+            setattr(mapping, 1, 'one') # type: ignore
 
         assert 1 not in mapping
 
@@ -597,9 +598,9 @@ def item_deletion(options):
         def del_get():
             "delete get"
             del mapping.get
-        
-        
-        with pytest.raises(TypeError): 
+
+
+        with pytest.raises(TypeError):
             del_get()
         assert 'get' in mapping
         assert mapping.get('get') == 'value'
@@ -671,9 +672,9 @@ def addition(options):
     constructor = options.constructor
 
     with pytest.raises(TypeError):
-        constructor() + 1
+        constructor() + 1 # type: ignore
     with pytest.raises(TypeError):
-        1 + constructor()
+        1 + constructor() # type: ignore
 
     assert constructor() + constructor() == {}
     assert constructor() + {} == {}

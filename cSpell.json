@@ -1,0 +1,15 @@
+{
+    "version": "0.2",
+    "language": "en",
+    "ignorePaths": [
+        "cSpell.json",
+        "./.pylintrc",
+        "settings.json"
+    ],
+    "words": [
+        "deepcopying"
+    ],
+    "ignoreRegExpList": [
+        "attr(dict(ionary)?|map|default)"
+    ]
+}

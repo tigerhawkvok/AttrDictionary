@@ -1,18 +1,18 @@
 """
 An implementation of MutableAttr.
 """
-from collections.abc import Mapping
-
+from typing import TypeVar, Tuple, Dict, cast, Mapping, Optional, Any, Iterator
 from attrdictionary.mixins import MutableAttr
 
 __all__ = ["AttrMap"]
+__v = TypeVar('__v')
+_AttrMap__v = TypeVar('_AttrMap__v')
 
-
-class AttrMap(MutableAttr):
+class AttrMap(MutableAttr[__v]):
     """
     An implementation of MutableAttr.
     """
-    def __init__(self, items=None, sequence_type=tuple):
+    def __init__(self, items:Optional[Mapping[str, __v]]= None, sequence_type:type= tuple):
         if items is None:
             items = {}
         elif not isinstance(items, Mapping):
@@ -28,13 +28,14 @@ class AttrMap(MutableAttr):
         """
         return self._sequence_type
 
-    def __getitem__(self, key):
+    def __getitem__(self, key:str) -> __v:
         """
         Access a value associated with a key.
         """
-        return self._mapping[key]
+        __mapping:Mapping[str, __v] = self._mapping
+        return __mapping[key]
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key:str, value:Any):
         """
         Add a key-value pair to the instance.
         """
@@ -46,13 +47,13 @@ class AttrMap(MutableAttr):
         """
         del self._mapping[key]
 
-    def __len__(self):
+    def __len__(self) -> int:
         """
         Check the length of the mapping.
         """
         return len(self._mapping)
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[__v]:
         """
         Iterated through the keys.
         """
@@ -67,7 +68,7 @@ class AttrMap(MutableAttr):
         # 99% of cases, sequence_type won't change anyway
         return f"AttrMap({repr(self._mapping)})"
 
-    def __getstate__(self):
+    def __getstate__(self) -> Tuple[Dict[str, __v], type, bool]:
         """
         Serialize the object.
         """
@@ -81,13 +82,13 @@ class AttrMap(MutableAttr):
         """
         Deserialize the object.
         """
-        mapping, sequence_type, allow_invalid_attributes = state
+        mapping, sequence_type, allow_invalid_attributes = cast(Tuple[Dict[str, __v], type, bool], state)
         self._setattr("_mapping", mapping)
         self._setattr("_sequence_type", sequence_type)
         self._setattr("_allow_invalid_attributes", allow_invalid_attributes)
 
     @classmethod
-    def _constructor(cls, mapping, configuration):
+    def _constructor(cls, mapping, configuration) -> "AttrMap[__v]":
         """
         A standardized constructor.
         """

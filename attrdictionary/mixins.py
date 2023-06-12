@@ -3,14 +3,15 @@ Mixin Classes for Attr-support.
 """
 import re
 from abc import abstractmethod
-from collections.abc import Mapping, MutableMapping, Sequence
+from typing import Any, TypeVar, Union, overload, Tuple, Mapping, MutableMapping, Sequence
 
 from attrdictionary.merge import merge
 
 __all__ = ["Attr", "MutableAttr"]
+__v = TypeVar('__v')
+_Attr__v = TypeVar('_Attr__v')
 
-
-class Attr(Mapping):
+class Attr(Mapping[str, __v]):
     """
     A mixin class for a mapping that allows for attribute-style access
     of values.
@@ -39,7 +40,7 @@ class Attr(Mapping):
         """
 
     @classmethod
-    def _constructor(cls, mapping, configuration):
+    def _constructor(cls, mapping, configuration) -> "Attr[__v]":
         """
         A standardized constructor used internally by Attr.
 
@@ -50,7 +51,7 @@ class Attr(Mapping):
         """
         raise NotImplementedError("You need to implement this")
 
-    def __call__(self, key):
+    def __call__(self, key:str) -> __v:
         """
         Dynamically access a key-value pair.
 
@@ -68,7 +69,7 @@ class Attr(Mapping):
 
         return self._build(self[key])
 
-    def __getattr__(self, key):
+    def __getattr__(self, key:str) -> __v:
         """
         Access an item as an attribute.
         """
@@ -81,7 +82,7 @@ class Attr(Mapping):
 
         return self._build(self[key])
 
-    def __add__(self, other):
+    def __add__(self, other:Mapping[str, Any]) -> "Attr[Any]":
         """
         Add a mapping to this Attr, creating a new, merged Attr.
 
@@ -94,7 +95,7 @@ class Attr(Mapping):
 
         return self._constructor(merge(self, other), self._configuration())
 
-    def __radd__(self, other):
+    def __radd__(self, other:Mapping[str, Any]) -> "Attr[Any]":
         """
         Add this Attr to a mapping, creating a new, merged Attr.
 
@@ -107,7 +108,15 @@ class Attr(Mapping):
 
         return self._constructor(merge(other, self), self._configuration())
 
-    def _build(self, obj):
+    @overload
+    def _build(self, obj:Union[str, bytes]) -> Union[str, bytes]: ...
+    @overload
+    def _build(self, obj:Sequence[__v]) -> Tuple[__v]: ...
+    @overload
+    def _build(self, obj:Mapping[str, __v]) -> "Attr[__v]": ...
+    @overload
+    def _build(self, obj:Any) -> Any: ...
+    def _build(self, obj:Union[Sequence, Mapping[str, Any], Any]):
         """
         Conditionally convert an object to allow for recursive mapping
         access.
@@ -121,16 +130,15 @@ class Attr(Mapping):
         """
         if isinstance(obj, Mapping):
             obj = self._constructor(obj, self._configuration())
-        elif isinstance(obj, Sequence) and not isinstance(obj, str | bytes):
+        elif isinstance(obj, Sequence) and not isinstance(obj, (str, bytes)):
             sequence_type = getattr(self, "_sequence_type", None)
-
             if sequence_type:
                 obj = sequence_type(self._build(element) for element in obj)
 
         return obj
 
     @classmethod
-    def _valid_name(cls, key):
+    def _valid_name(cls, key:str) -> bool:
         """
         Check whether a key is a valid attribute name.
 
@@ -143,24 +151,24 @@ class Attr(Mapping):
         """
         return (
                 isinstance(key, str)  and
-                re.match("^[A-Za-z][A-Za-z0-9_]*$", key) and
+                (re.match("^[A-Za-z][A-Za-z0-9_]*$", key) is not None) and
                 not hasattr(cls, key)
         )
 
 
-class MutableAttr(Attr, MutableMapping):
+class MutableAttr(Attr[__v], MutableMapping):
     """
     A mixin class for a mapping that allows for attribute-style access
     of values.
     """
-    def _setattr(self, key, value):
+    def _setattr(self, key:str, value:Any):
         """
         Add an attribute to the object, without attempting to add it as
         a key to the mapping.
         """
         super().__setattr__(key, value)
 
-    def __setattr__(self, key, value):
+    def __setattr__(self, key:str, value:Any):
         """
         Add an attribute.
 
@@ -170,20 +178,20 @@ class MutableAttr(Attr, MutableMapping):
         if self._valid_name(key):
             self[key] = value
         elif getattr(self, "_allow_invalid_attributes", True):
-            super().__setattr__(key, value)
+            self._setattr(key, value)
         else:
             raise TypeError(
-                f"'{self.__class__.__name__}' does not allow attribute creation.",
+                f"'{self.__class__.__name__}' does not allow attribute creation. (attempted {key} = {value})",
             )
 
-    def _delattr(self, key):
+    def _delattr(self, key:str):
         """
         Delete an attribute from the object, without attempting to
         remove it from the mapping.
         """
         super().__delattr__(key)
 
-    def __delattr__(self, key):
+    def __delattr__(self, key:str):
         """
         Delete an attribute.
 

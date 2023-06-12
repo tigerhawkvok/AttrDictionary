@@ -1,19 +1,20 @@
 """
 A subclass of MutableAttr that has defaultdict support.
 """
-from collections.abc import Mapping
+from typing import TypeVar, Tuple, Dict, cast, Optional, Any, Mapping
 
 from attrdictionary.mixins import MutableAttr
 
 __all__ = ["AttrDefault"]
+__v = TypeVar('__v')
+_AttrDefault__v = TypeVar('_AttrDefault__v')
 
 
-class AttrDefault(MutableAttr):
+class AttrDefault(MutableAttr[__v]):
     """
     An implementation of MutableAttr with defaultdict support
     """
-    def __init__(self, default_factory=None, items=None, sequence_type=tuple,
-                 pass_key=False):
+    def __init__(self, default_factory= None, items:Optional[Mapping[str, __v]]= None, sequence_type:type= tuple, pass_key:bool= False):
         if items is None:
             items = {}
         elif not isinstance(items, Mapping):
@@ -25,13 +26,13 @@ class AttrDefault(MutableAttr):
         self._setattr("_pass_key", pass_key)
         self._setattr("_allow_invalid_attributes", False)
 
-    def _configuration(self):
+    def _configuration(self) -> Tuple[type, Optional[Any], bool]:
         """
         The configuration for a AttrDefault instance
         """
         return self._sequence_type, self._default_factory, self._pass_key
 
-    def __getitem__(self, key):
+    def __getitem__(self, key:str):
         """
         Access a value associated with a key.
 
