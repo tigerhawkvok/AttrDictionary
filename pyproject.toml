@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "AttrDictionary"
-version = "2.0.1"
+version = "2.1.0"
 description = "Fork of kiselas/AttrDictionary , itself a fork of bcj/AttrDict"
 authors = ["Philip Kahn <tigerhawkvok@gmail.com>"]
 license = "MIT"
