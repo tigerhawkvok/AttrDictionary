@@ -1,10 +1,13 @@
 [tool.poetry]
-name = "AttrDictionary"
+name = "AttrDictionary2"
 version = "2.1.0"
 description = "Fork of kiselas/AttrDictionary , itself a fork of bcj/AttrDict"
 authors = ["Philip Kahn <tigerhawkvok@gmail.com>"]
 license = "MIT"
 repository = "https://github.com/tigerhawkvok/AttrDictionary"
+packages = [
+    {include = "attrdictionary"}
+]
 
 
 [tool.poetry.dependencies]
